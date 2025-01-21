@@ -40,6 +40,14 @@ func (c *HttpClient) GetState(entityId string) ([]byte, error) {
 	return resp, nil
 }
 
+func (c *HttpClient) States() ([]byte, error) {
+	resp, err := get(c.url+"/states", c.token)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
 func get(url, token string) ([]byte, error) {
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {

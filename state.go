@@ -16,6 +16,7 @@ type State interface {
 	BeforeSunrise(...DurationString) bool
 	AfterSunset(...DurationString) bool
 	BeforeSunset(...DurationString) bool
+	List() ([]EntityState, error)
 	Get(entityId string) (EntityState, error)
 	Equals(entityId, state string) (bool, error)
 }
@@ -70,6 +71,16 @@ func (s *StateImpl) Get(entityId string) (EntityState, error) {
 		return EntityState{}, err
 	}
 	es := EntityState{}
+	err = json.Unmarshal(resp, &es)
+	return es, err
+}
+
+func (s *StateImpl) List() ([]EntityState, error) {
+	resp, err := s.httpClient.States()
+	if err != nil {
+		return nil, err
+	}
+	es := []EntityState{}
 	err = json.Unmarshal(resp, &es)
 	return es, err
 }
